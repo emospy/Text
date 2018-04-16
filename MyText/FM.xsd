@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:complexType name="Method">
+		<xs:sequence>
+			<xs:element name="MethodName" type="xs:string" minOccurs="1" maxOccurs="1" />			
+			<xs:element name="returnValue" type="DataType" minOccurs="1" maxOccurs="1"/>
+			<!-- Used only in case the upped data type is of type object-->
+			<xs:element name="ClassName" minOccurs="0"/>
+			<xs:choice maxOccurs="unbounded">
+					<xs:element name="Member" type="Member" minOccurs="0"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="Member">
+		<xs:sequence>	
+			<xs:element name="MemberName" type="xs:string" minOccurs="1" maxOccurs="1" />			
+			<xs:element name="DataType" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<!-- Used only in case the upped data type is of type object-->
+			<xs:element name="ClassName" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ClassDescription">
+		<xs:sequence>	
+			<xs:element name="ClassName" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="Member" type="Member"/>
+				<xs:element name="Method" type="Method"/>				
+			</xs:choice>				
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="DataType">
+		<xs:simpleType>						
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="char"/>
+				<xs:enumeration value="short"/>
+				<xs:enumeration value="int"/>
+				<xs:enumeration value="float"/>
+				<xs:enumeration value="double"/>
+				<xs:enumeration value="string"/>
+				<xs:enumeration value="object"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:complexType>
+	
+	<xs:complexType name="Port">		
+		<xs:sequence>	
+			<xs:element name="PortName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="PortDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="PortUserTextDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="DataType" type="DataType" minOccurs="1" maxOccurs="1"/>
+				
+			
+			<xs:element name="Link" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="ObjectRequirements" type="ClassDescription" minOccurs="0" maxOccurs="1" />			
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexContent name="In">
+		<xs:extension base="Port">
+			<xs:sequence>
+				<xs:element name="ActivationType">
+					<xs:simpleType>						
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Activating"/>
+							<xs:enumeration value="Passive"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="ReferenceType">
+					<xs:simpleType>						
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Reference"/>
+							<xs:enumeration value="Value"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+	
+	<xs:complexContent name="Parameter">
+		<xs:extension base="Port">			
+		</xs:extension>
+	</xs:complexContent>
+	
+	<xs:complexContent name="State">
+		<xs:extension base="Port">			
+		</xs:extension>
+	</xs:complexContent>
+	
+	<xs:complexContent name="Out">
+		<xs:extension base="Port">
+			<xs:sequence>
+				<xs:element name="ConnectionType">
+					<xs:simpleType>						
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="Connected"/>
+							<xs:enumeration value="Disconnected"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>				
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+	
+	<xs:complexType name="FMData">		
+		<xs:sequence>			
+			<xs:element name="FMName" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="FMInstanceName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="FMTextDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="FMUserTextDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="FMVersion" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="FMDescriptor">
+		<xs:complexType>
+			<xs:sequence>				
+				<xs:element name="FMData" type="FMData" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="Inputs">
+					<xs:element name="In" type="In" minOccurs="0"/>
+				</xs:element>
+				<xs:element name="Parameters">
+					<xs:element name="Parameter" type = "Parameter" minOccurs="0"/>
+				</xs:element>
+				<xs:element	name="States">
+					<xs:element name="State" type="State" minOccurs="0"/>
+				</xs:element>
+				<xs:element name="Outputs">
+					<xs:element name="Out" type="Out" minOccurs="0"/>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
