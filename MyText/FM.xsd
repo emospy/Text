@@ -25,10 +25,12 @@
 	<xs:complexType name="ClassDescription">
 		<xs:sequence>	
 			<xs:element name="ClassName" type="xs:string" minOccurs="1" maxOccurs="1" />
-			<xs:choice maxOccurs="unbounded">
+			<xs:element name="Members" >
 				<xs:element name="Member" type="Member"/>
+			</xs:element>
+			<xs:element name="Methods" >
 				<xs:element name="Method" type="Method"/>				
-			</xs:choice>				
+			</xs:element>							
 		</xs:sequence>
 	</xs:complexType>
 	
